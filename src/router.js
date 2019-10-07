@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router';
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css'
 
+import Login from '@/views/Login.vue'
 
 Vue.config.productionTip = false
 // 注册路由插件
 Vue.use(Router)
-Vue.use(ElementUI)
+
 
 // 创建路由对象
 export default new Router({
@@ -17,7 +16,8 @@ export default new Router({
   base: process.env.BASE_URL,
 
   // 路由的配置
-  routes: [
-
-  ]
+  routes: [{
+    path: "/login",
+    component: Login
+  }]
 })
