@@ -124,6 +124,7 @@ export default {
     this.getList();
 
     // 获取数据的总条数，只针对当前这个项目
+    // 请求文章列表
     this.$axios({
       url: `/post?pageIndex=${this.pageIndex}&pageSize=9999`
     }).then(res => {
