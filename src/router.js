@@ -29,14 +29,16 @@ export default new Router({
     },
     {
       path: "/",
-      component: Index,
-      children: [{
+      component: Index,meta:"文章管理",
+      children: [
+        // 一个路径对应一个组件，子路由的path不能带斜杠
+        {
           path: "postlist",
-          component: PostList
+          component: PostList,meta:"文章列表"
         },
         {
           path: "postadd",
-          component: PostAdd
+          component: PostAdd,meta:"发布文章"
         }
       ]
     }

@@ -37,6 +37,7 @@
         </el-header>
         <!-- 主体，子组件页面显示的内容 -->
         <el-main>
+          <div class="navigation">{{breaks}}</div>
           <!-- 显示子路由匹配的页面 -->
           <router-view></router-view>
         </el-main>
@@ -51,6 +52,21 @@ export default {
     return {
       user: JSON.parse(localStorage.getItem("user") || "{}")
     };
+  },
+
+  // computed里面的函数监听到函数中引用的所有实例下的属性的变化
+  computed: {
+    breaks() {
+      // console.log(breaks);
+      const { matched } = this.$route;
+      const arr = [];
+
+      matched.forEach(v => {
+        arr.push(v.meta);
+      });
+
+      return arr.join("/");
+    }
   },
 
   // 事件函数
@@ -88,8 +104,8 @@ export default {
       margin-right: 10px;
       border: 1px #eee solid;
     }
-    .nickname{
-      padding-right:40px;
+    .nickname {
+      padding-right: 40px;
     }
   }
 }
@@ -107,12 +123,15 @@ export default {
     background: #333;
   }
 }
-
+.el-menu {
+  border-right: none;
+}
+.navigation{
+  padding-bottom: 20px;
+}
 .el-main {
   background-color: #e9eef3;
   color: #333;
-  text-align: center;
-  line-height: 160px;
 }
 
 body > .el-container {
