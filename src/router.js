@@ -10,6 +10,8 @@ import Index from "@/views/Index.vue"
 import PostList from "@/views/PostList"
 import PostAdd from "@/views/PostAdd"
 
+import PostEdit from "@/views/PostEdit"
+
 Vue.config.productionTip = false
 // 注册路由插件
 Vue.use(Router)
@@ -29,16 +31,24 @@ export default new Router({
     },
     {
       path: "/",
-      component: Index,meta:"文章管理",
+      component: Index,
+      meta: "文章管理",
       children: [
         // 一个路径对应一个组件，子路由的path不能带斜杠
         {
           path: "postlist",
-          component: PostList,meta:"文章列表"
+          component: PostList,
+          meta: "文章列表"
         },
         {
           path: "postadd",
-          component: PostAdd,meta:"发布文章"
+          component: PostAdd,
+          meta: "发布文章"
+        },
+        {
+          path: "postedit/:id",
+          component: PostEdit,
+          meta: "编辑文章"
         }
       ]
     }

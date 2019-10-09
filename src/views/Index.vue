@@ -32,7 +32,7 @@
             <img :src="$axios.defaults.baseURL+user.user.head_img" v-if="user.user.head_img" alt />
             <img src="../assets/touxiang1.png" v-else alt />
             <span class="nickname">{{user.user.nickname}}</span>
-            <span>退出</span>
+            <span @click="handleremove" class="remove">退出</span>
           </div>
         </el-header>
         <!-- 主体，子组件页面显示的内容 -->
@@ -70,7 +70,18 @@ export default {
   },
 
   // 事件函数
-  methods: {},
+  methods: {
+    handleremove() {
+      this.$confirm("确定退出管理?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        localStorage.removeItem("user");
+        this.$router.push("/login");
+      });
+    }
+  },
 
   //   页面加载完触发
   mounted() {}
@@ -107,6 +118,9 @@ export default {
     .nickname {
       padding-right: 40px;
     }
+    .remove {
+      cursor: pointer;
+    }
   }
 }
 
@@ -126,7 +140,7 @@ export default {
 .el-menu {
   border-right: none;
 }
-.navigation{
+.navigation {
   padding-bottom: 20px;
 }
 .el-main {

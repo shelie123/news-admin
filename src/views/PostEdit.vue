@@ -4,28 +4,9 @@
       <el-form-item label="标题">
         <el-input v-model="form.title"></el-input>
       </el-form-item>
-      <el-form-item label="类型">
-        <el-radio-group v-model="form.type">
-          <el-radio :label="1">文章</el-radio>
-          <el-radio :label="2">视频</el-radio>
-        </el-radio-group>
+      <el-form-item label="内容">
+        <el-input v-model="form.content" type="textarea" :rows="5" placeholder="请输入文章内容"></el-input>
       </el-form-item>
-      <el-form-item label="内容" v-if="form.type===1">
-        <VueEditor :config="config" ref="vueEditor" />
-      </el-form-item>
-      <el-form-item label="视频" v-if="form.type===2">
-        <el-upload
-          :action="`${$axios.defaults.baseURL}/upload`"
-          name="file"
-          :headers="{
-             Authorization:token
-          }"
-          :on-success="handleVideoSuccess"
-        >
-          <el-button size="small" type="primary">点击上传</el-button>
-        </el-upload>
-      </el-form-item>
-
       <el-form-item label="栏目">
         <!-- 栏目的数据来自于后台 -->
         <el-checkbox-group v-model="form.categories">
@@ -46,7 +27,7 @@
         on-remove:移出图片函数
         -->
         <el-upload
-          :action="`${$axios.defaults.baseURL}/upload`"
+          action="http://localhost:3000/upload"
           name="file"
           :headers="{
             Authorization:token
@@ -59,6 +40,12 @@
         </el-upload>
       </el-form-item>
 
+      <el-form-item label="类型">
+        <el-radio-group v-model="form.type">
+          <el-radio :label="1">文章</el-radio>
+          <el-radio :label="2">视频</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">发表文章</el-button>
         <el-button>取消发布</el-button>
@@ -68,9 +55,6 @@
 </template>
 
 <script>
-import VueEditor from "vue-word-editor";
-import "quill/dist/quill.snow.css";
-
 export default {
   name: "app",
   data() {
@@ -85,45 +69,9 @@ export default {
       },
       // 栏目列表
       allCate: [],
-      token: JSON.parse(localStorage.getItem(`user`) || `{}`).token,
-
-      // 编辑器的配置
-      config: {
-        // 上传图片的配置
-        uploadImage: {
-          url: this.$axios.defaults.baseURL + "/upload",
-          name: "file",
-          // 添加头信息
-          headers: {
-            Authorization: JSON.parse(localStorage.getItem("user") || `{}`)
-              .token
-          },
-          // res是结果，insert方法会把内容注入到编辑器中，res.data.url是资源地址
-          uploadSuccess: (res, insert) => {
-            insert(this.$axios.defaults.baseURL + res.data.data.url);
-          }
-        },
-
-        // 上传视频的配置
-        uploadVideo: {
-          url: this.$axios.defaults.baseURL + "/upload",
-          name: "file",
-          headers: {
-            Authorization: JSON.parse(localStorage.getItem("user") || `{}`)
-              .token
-          },
-          uploadSuccess: (res, insert) => {
-            insert(this.$axios.defaults.baseURL + res.data.data.url);
-          }
-        }
-      }
+      token: JSON.parse(localStorage.getItem(`user`) || `{}`).token
     };
   },
-  // 注册组件
-  components: {
-    VueEditor
-  },
-  // 事件函数
   methods: {
     onSubmit() {
       // console.log(this.form.cover);
@@ -135,11 +83,8 @@ export default {
           id: v
         });
       });
-
-      // 使用refs获取编辑器中内容
-      if (this.form.type === 1) {
-        this.form.content = this.$refs.vueEditor.editor.root.innerHTML;
-      }
+      // console.log(this.form);
+      // this.form.content = this.$refs.vueEditor.editor.root.innerHTML;
 
       this.$axios({
         url: "/post",
@@ -154,12 +99,6 @@ export default {
         this.$message.success(message);
       });
     },
-    // 视频上传事件
-    handleVideoSuccess(res) {
-      // 把视频连接保存到content
-      this.form.content = this.$axios.defaults.baseURL + res.data.url;
-    },
-
     // 移出图片的时候触发的函数
     handleRemove(file, fileList) {
       // console.log(file, fileList);

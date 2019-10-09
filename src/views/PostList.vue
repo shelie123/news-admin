@@ -70,7 +70,9 @@ export default {
   methods: {
     // index是索引，row是对象
     handleEdit(index, row) {
-      console.log(index, row);
+      // console.log(index, row);
+      // 跳转到编辑页
+      this.$router.push("/postedit/" + row.id);
     },
     // 关闭或打开文章
     handleDelete(index, row) {
